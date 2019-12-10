@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Paises{% endblock %}
+{% block contenido %}
+	
+	<h2>Resultado Paises</h2>
+
+	<table class='table table-striped'>
+
+		<tr>
+			<th>Nombre</th>
+			<th>ISO 3</th>
+			<th>Continente</th>
+			<th>Moneda</th>
+		</tr>
+
+		{% for nombre, iso3, continente, nombre_moneda in countries %}
+
+				<tr>
+					<td>
+						{{nombre}}
+					</td>
+					<td>
+						{{iso3}}
+					</td>
+					<td>
+						{{continente}}
+					</td>
+					<td>
+						{{nombre_moneda}}
+					</td>
+        		</tr>
+
+		{% endfor %}
+  
+	</table>
+
+	<a class="btn btn-primary form-control" href="{{url_for('root')}}">Volver</a>
+
+{% endblock %}
