@@ -1,0 +1,45 @@
+{% extends "bootstrap/base.html" %}
+
+{% block styles %}
+{{ super() }}
+
+  <style>
+    body{
+          background-color: rgba(0, 0, 0, 0.168);
+        }
+  </style>
+
+{% endblock %}
+
+{% block navbar %}
+
+	<nav class="navbar navbar-default navbar-expand-lg">
+      <div class="container">
+        
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{url_for('root')}}">Agenda</a>
+        </div>
+ 
+        <div class="collapse navbar-collapse" id="recipes-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="{{url_for('add_task')}}">Añadir Tarea</a></li>
+            <li><a href="{{url_for('update_task', task_id = 1)}}">Modificar Tarea</a></li>
+            <li><a href="#">Eliminar Tarea</a></li>
+            <li><a href="#">Listar Tareas</a></li>
+          </ul>
+          <!--<ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Welcome !</a></li>
+          </ul>-->
+        </div>
+      </div>
+    </nav>
+
+{% endblock %}
+
+{% block content %}
+
+	<div class="container" style="padding: 10px;">
+		{% block contenido %}{% endblock %}
+	</div>  
+    
+{% endblock %}
