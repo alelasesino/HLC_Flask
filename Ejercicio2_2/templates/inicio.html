@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Ejercicio 2.2{% endblock %}
+{% block contenido %}
+	    <h2>Listado de paises del mundo</h2>
+	    <ul class="list-group">
+
+			<li class="list-group-item"><a href="{{url_for('all_countries_result', page = 1)}}">Todos los paises</a></li>
+			<li class="list-group-item"><a href="{{url_for('europe_result', page = 1)}}">Paises de "Europa"</a></li>
+			<li class="list-group-item"><a href="{{url_for('without_money', page = 1)}}">Paises que no tienen definida moneda</a></li>
+
+		</ul>
+  
+{% endblock %}

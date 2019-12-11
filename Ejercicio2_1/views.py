@@ -1,10 +1,10 @@
 
 from flask import Flask, render_template, request, redirect
-from Ejercicio02 import app
+from Ejercicio2_1 import app
 from flask_wtf import FlaskForm
 from wtforms import SelectField
 
-import Ejercicio02.database as database
+import Ejercicio2_1.database as database
 
 class RootForm(FlaskForm):
     countries = SelectField('Continentes')
@@ -39,6 +39,6 @@ def without_money():
 def select_continent(continent):
     return render_template('resultado.html', countries = database.query_countries(continent))
 
-#@app.errorhandler(404)
-#def page_not_found(error):
-#    return render_template("error.html", error="Página no encontrada..."), 404
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("error.html", error="Página no encontrada...")

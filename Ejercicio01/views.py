@@ -25,6 +25,6 @@ def without_money():
     return render_template("resultado.html", countries = database.query_without_money_countries())
 
 
-#@app.errorhandler(404)
-#def page_not_found(error):
-#    return render_template("error.html", error="Página no encontrada..."), 404
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("error.html", error="Página no encontrada...")
