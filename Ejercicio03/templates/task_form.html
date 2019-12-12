@@ -1,26 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block item_nav %}
-
-	<li class="active"><a href="{{url_for('add_task')}}">Añadir Tarea</a></li>
-	<li><a href="{{url_for('select_update_task')}}">Modificar Tarea</a></li>
-	<li><a href="{{url_for('select_delete_task')}}">Eliminar Tarea</a></li>
-	<li>
-		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">
-		<span class="nav-label">Listar tareas</span><span class="caret"></span>
-		</a>
-		<ul class="dropdown-menu">
-			<li><a href="{{url_for('task_list')}}">Todas las tareas</a></li>
-			<li><a href="#">Tareas pendientes</a></li>
-			<li><a href="#">Tareas completadas</a></li>
-			<li><a href="#">Tareas por prioridad</a></li>
-			<li><a href="#">Tareas por estado</a></li>
-		</ul>
-	</li>
-
-{% endblock %}
-
 {% block title %}Agenda{% endblock %}
 {% block contenido %}
 	

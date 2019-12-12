@@ -21,11 +21,11 @@ def add_task():
         task = Task(-1, form.fecha.data, form.descripcion.data, form.prioridad.data, form.estado.data)
         database.insert_task(task)
 
-        return render_template("inicio.html", message = "Tareas creada correctamente.")
+        return render_template("inicio.html", message = "Tarea creada correctamente.")
         #return redirect(url_for('root'))
 
     else:
-        return render_template("task_form.html", form = form, post_url = 'add_task')
+        return render_template("task_form.html", form = form, post_url = 'add_task', operation = "añadir")
 
 
 @app.route('/task/update', methods=['GET', 'POST'])
@@ -61,7 +61,7 @@ def update_task(task_id):
         return render_template("inicio.html", message = "Tarea modifica correctamente.")
 
     else:
-        return render_template("task_form.html", form = form, post_url = 'update_task', task_id = task_id)
+        return render_template("task_form.html", form = form, post_url = 'update_task', task_id = task_id, operation = "actualizar")
 
 
 @app.route('/task/delete', methods=['GET', 'POST'])
@@ -90,8 +90,7 @@ def delete_task(task_id):
 
 def bind_data_task_form(form, task):
     
-    if(task == None):
-        abort(404)
+    if(task == None): abort(404)
 
     form.fecha.data = task.fecha
     form.descripcion.data = task.descripcion
@@ -99,14 +98,31 @@ def bind_data_task_form(form, task):
     form.estado.data = task.estado
 
 
-@app.route('/task/list', methods=['GET'])
+@app.route('/task/list', methods=['GET', 'POST'])
 def task_list():
 
-    task_list = database.get_all_task()
+    filter = request.args.get('filter')
+
+    filters = {
+        'pending': lambda: database.get_state_task(0),
+        'completed': lambda: database.get_state_task(2)
+    }
+
+    if filter == None or filter == "form":
+        task_list = database.get_all_task()
+    else:
+        if filter in filters:
+            task_list = filters[filter]()
+        else:
+            abort(404)
 
     form = TaskListForm()
 
-    return render_template("task_list.html", title = "Lista de tareas", form = form, task_list = task_list)
+    if form.validate_on_submit():
+        task_list = database.get_priority_state_task(form.prioridad.data, form.estado.data)
+        filter = "form"
+
+    return render_template("task_list.html", form = form, task_list = task_list, filter = filter, operation = "listar")
 
 
 @app.errorhandler(404)

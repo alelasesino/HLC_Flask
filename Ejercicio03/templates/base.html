@@ -1,4 +1,5 @@
 {% extends "bootstrap/base.html" %}
+{% from "macros.html" import items_nav %}
 
 {% block styles %}
 {{ super() }}
@@ -13,23 +14,7 @@
 
 {% block navbar %}
 
-	<nav class="navbar navbar-default navbar-expand-lg">
-      <div class="container">
-        
-        <div class="navbar-header">
-          <a class="navbar-brand" href="{{url_for('root')}}">Agenda</a>
-        </div>
- 
-        <div class="collapse navbar-collapse" id="recipes-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            {% block item_nav %} {% endblock %}
-          </ul>
-          <!--<ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Welcome !</a></li>
-          </ul>-->
-        </div>
-      </div>
-    </nav>
+  {{ items_nav(operation) }}
 
 {% endblock %}
 

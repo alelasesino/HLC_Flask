@@ -6,12 +6,15 @@ from wtforms import SelectField, TextAreaField, IntegerField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import InputRequired, ValidationError
 
+PrioritySelectField = SelectField(choices=[(i, i) for i in range(6)], coerce=int)
+StateSelectField = SelectField(choices=[(0, 'Pendiente'), (1, 'En proceso'), (2, 'Completada')], coerce=int)
+
 class TaskForm(FlaskForm):
 
     fecha = DateField('Fecha', validators=[InputRequired(message="La fecha es requerida")])
-    descripcion = TextAreaField('Descripcion', validators=[InputRequired(message="La descripcion es requerida")])
-    prioridad = SelectField(choices=[(i, i) for i in range(6)], coerce=int)
-    estado = SelectField(choices=[(0, 'Pendiente'), (1, 'En proceso'), (2, 'Completada')], coerce=int)
+    descripcion = TextAreaField('Descripcion', validators=[InputRequired(message="La descripcion es requerida")], render_kw={"placeholder": "Descripcion..."})
+    prioridad = PrioritySelectField
+    estado = StateSelectField
 
     def __init__(self, update, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -30,7 +33,7 @@ class TaskForm(FlaskForm):
 
 class SelectTaskForm(FlaskForm):
 
-    id = IntegerField('ID de la tarea', validators=[InputRequired(message="El ID de la tarea es requerida")])
+    id = IntegerField('ID de la tarea', validators=[InputRequired(message="El ID de la tarea es requerida")], render_kw={"placeholder": "ID de la tarea..."})
 
     def __init__(self, task_list, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -42,5 +45,5 @@ class SelectTaskForm(FlaskForm):
 
 class TaskListForm(FlaskForm):
     
-    prioridad = SelectField(choices=[(i, i) for i in range(6)], coerce=int)
-    estado = SelectField(choices=[(0, 'Pendiente'), (1, 'En proceso'), (2, 'Completada')], coerce=int)
+    prioridad = PrioritySelectField
+    estado = StateSelectField

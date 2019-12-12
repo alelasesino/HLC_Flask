@@ -27,26 +27,19 @@ def get_all_task():
 
 
 def get_state_task(state):
-
-    with closing(db.cursor()) as c:
-
-        sql_query = "SELECT id, fecha, descripcion, prioridad, estado FROM agenda WHERE estado = %s"
-        c.execute(sql_query, [state])
-
-        tasks = []
-
-        for (id, fecha, descripcion, prioridad, estado) in c:
-            tasks.append(Task(id, fecha, descripcion, prioridad, estado))
-
-    return tasks
+    return get_priority_state_task(state=state)
 
 
 def get_priority_task(priority):
+    return get_priority_state_task(priority)
+
+
+def get_priority_state_task(priority = "", state = ""):
 
     with closing(db.cursor()) as c:
 
-        sql_query = "SELECT id, fecha, descripcion, prioridad, estado FROM agenda WHERE prioridad = %s"
-        c.execute(sql_query, [priority])
+        sql_query = f"SELECT id, fecha, descripcion, prioridad, estado FROM agenda WHERE prioridad = %s AND estado = %s"
+        c.execute(sql_query, (priority, state))
 
         tasks = []
 
@@ -54,7 +47,6 @@ def get_priority_task(priority):
             tasks.append(Task(id, fecha, descripcion, prioridad, estado))
 
     return tasks
-
 
 def get_task_by_id(task_id):
 
