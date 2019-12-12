@@ -22,10 +22,7 @@
  
         <div class="collapse navbar-collapse" id="recipes-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="{{url_for('add_task')}}">Añadir Tarea</a></li>
-            <li><a href="{{url_for('update_task', task_id = 1)}}">Modificar Tarea</a></li>
-            <li><a href="#">Eliminar Tarea</a></li>
-            <li><a href="#">Listar Tareas</a></li>
+            {% block item_nav %} {% endblock %}
           </ul>
           <!--<ul class="nav navbar-nav navbar-right">
             <li><a href="#">Welcome !</a></li>

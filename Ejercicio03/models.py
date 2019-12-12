@@ -1,6 +1,8 @@
 
 from datetime import datetime
 
+STATES = ["Pendiente", "En proceso", "Completada"]
+
 class Task:
 
     def __init__(self, id:int, fecha:datetime, descripcion:str, prioridad:int, estado:int):
@@ -9,6 +11,7 @@ class Task:
         self.descripcion = descripcion
         self.prioridad = prioridad
         self.estado = estado
+        self.estadostr = STATES[estado]
 
     @classmethod
     def new_task(cls):

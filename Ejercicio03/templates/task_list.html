@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Inicio{% endblock %}
-
 {% block item_nav %}
     <li><a href="{{url_for('add_task')}}">Añadir Tarea</a></li>
     <li><a href="{{url_for('select_update_task')}}">Modificar Tarea</a></li>
     <li><a href="{{url_for('select_delete_task')}}">Eliminar Tarea</a></li>
-    <li>
+    <li class="active">
         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">
         <span class="nav-label">Listar tareas</span><span class="caret"></span>
         </a>
@@ -21,13 +19,56 @@
     </li>
 {% endblock %}
 
-{% block content %}
+{% block contenido %}
+	
+	<h2>{{title}}</h2>
 
-<div class="jumbotron">
-    <div class="container">
-        <h1>Agenda</h1>
-        <p>{{message}}</p>
-    </div>
-</div>
+	{% if filter == "priority" %}
+
+		<form action="{{url_for(post_url, task_id = task_id)}}" method="POST" novalidate>
+
+			<dl>
+				{{ form.csrf_token }}
+				{{ wtf.form_field(form.prioridad) }}
+				{{ wtf.form_field(form.estado) }}
+			</dl>
+
+		</form>
+
+	{% endif %}
+
+	<table class='table table-striped'>
+
+		<tr>
+			<th>ID</th>
+			<th>Fecha</th>
+			<th>Descripcion</th>
+			<th>Prioridad</th>
+			<th>Estado</th>
+		</tr>
+
+		{% for task in task_list %}
+
+			<tr>
+				<td>
+					{{task.id}}
+				</td>
+				<td>
+					{{task.fecha}}
+				</td>
+				<td>
+					{{task.descripcion}}
+				</td>
+				<td>
+					{{task.prioridad}}
+				</td>
+				<td>
+					{{task.estadostr}}
+				</td>
+			</tr>
+
+		{% endfor %}
+	
+	</table>
 
 {% endblock %}
