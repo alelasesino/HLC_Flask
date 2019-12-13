@@ -15,14 +15,15 @@ def root():
 def add_task():
 
     form = TaskForm(False)
-    
+    form.estado.render_kw = {"disabled": True}
+    form.estado.data = 0
+
     if form.validate_on_submit():
         
         task = Task(-1, form.fecha.data, form.descripcion.data, form.prioridad.data, form.estado.data)
         database.insert_task(task)
 
         return render_template("inicio.html", message = "Tarea creada correctamente.")
-        #return redirect(url_for('root'))
 
     else:
         return render_template("task_form.html", form = form, post_url = 'add_task', operation = "añadir")

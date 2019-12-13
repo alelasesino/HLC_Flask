@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% from "macros.html" import task_table %}
 
 {% block contenido %}
 
@@ -23,38 +24,6 @@
 
 	<h2>Lista de tareas</h2>
 
-	<table class='table table-striped'>
-
-		<tr>
-			<th>ID</th>
-			<th>Fecha</th>
-			<th>Descripcion</th>
-			<th>Prioridad</th>
-			<th>Estado</th>
-		</tr>
-
-		{% for task in task_list %}
-
-			<tr>
-				<td>
-					{{task.id}}
-				</td>
-				<td>
-					{{task.fecha}}
-				</td>
-				<td>
-					{{task.descripcion}}
-				</td>
-				<td>
-					{{task.prioridad}}
-				</td>
-				<td>
-					{{task.estadostr}}
-				</td>
-			</tr>
-
-		{% endfor %}
-	
-	</table>
+	{{task_table(task_list)}}
 
 {% endblock %}

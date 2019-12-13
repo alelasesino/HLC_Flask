@@ -16,7 +16,7 @@ PERPAGE = 20
 
 def query_countries(continent, page):
 
-    start_page = (page-1) * PERPAGE
+    start_page = get_start_page(page)
     
     with closing(db.cursor()) as c:
 
@@ -34,7 +34,7 @@ def query_countries(continent, page):
 
 def query_without_money_countries(page):
     
-    start_page = (page-1) * PERPAGE
+    start_page = get_start_page(page)
 
     with closing(db.cursor()) as c:
 
@@ -43,12 +43,16 @@ def query_without_money_countries(page):
         return c.fetchall();
 
 
+def get_start_page(page):
+    return (page-1) * PERPAGE
+
+
 def get_countries_page_count():
     return count_query_rows("SELECT COUNT(*) AS 'rows' FROM paises ORDER BY nombre")
 
 
 def get_europe_page_count():
-    return count_query_rows("SELECT COUNT(*) AS 'ROWS' FROM paises WHERE continente = 'Europa' ORDER BY nombre")
+    return count_query_rows("SELECT COUNT(*) AS 'rows' FROM paises WHERE continente = 'Europa' ORDER BY nombre")
 
 
 def get_no_money_page_count():
@@ -57,12 +61,11 @@ def get_no_money_page_count():
 
 def count_query_rows(query):
 
-    with closing(db.cursor()) as c:
+    with closing(db.cursor(dictionary=True)) as c:
 
         c.execute(query)
-
-        rows = c.fetchone()[0]
-        pages = rows / PERPAGE
+        
+        pages = c.fetchone()["rows"] / PERPAGE
         
         return int(math.ceil(pages));
     

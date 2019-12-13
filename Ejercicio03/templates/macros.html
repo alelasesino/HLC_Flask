@@ -33,3 +33,42 @@
       </nav>
 
 {% endmacro %}
+
+{% macro task_table(task_list) %}
+
+  <table class='table table-striped' id="taskTable">
+
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Descripcion</th>
+      <th>Prioridad</th>
+      <th>Estado</th>
+    </tr>
+
+    {% for task in task_list %}
+
+      <tr>
+        <td id="task_id">
+          {{task.id}}
+        </td>
+        <td>
+          {{task.fecha}}
+        </td>
+        <td>
+          {{task.descripcion}}
+        </td>
+        <td>
+          {{task.prioridad}}
+        </td>
+        <td>
+          {{task.estadostr}}
+        </td>
+      </tr>
+
+    {% endfor %}
+
+  </table>
+
+{% endmacro %}
+

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% from "macros.html" import task_table %}
 
 {% block title %}Agenda{% endblock %}
 
@@ -14,42 +15,30 @@
 			{{ wtf.form_field(form.id, autocomplete="off") }}
 		</dl>
 		
-		<table class='table table-striped'>
-
-			<tr>
-				<th>ID</th>
-				<th>Fecha</th>
-				<th>Descripcion</th>
-				<th>Prioridad</th>
-				<th>Estado</th>
-			</tr>
-	
-			{% for task in task_list %}
-
-				<tr>
-					<td>
-						{{task.id}}
-					</td>
-					<td>
-						{{task.fecha}}
-					</td>
-					<td>
-						{{task.descripcion}}
-					</td>
-					<td>
-						{{task.prioridad}}
-					</td>
-					<td>
-						{{task.estadostr}}
-					</td>
-				</tr>
-	
-			{% endfor %}
-	  
-		</table>
+		{{task_table(task_list)}}
 
 		<input class="btn btn-primary form-control" type="submit" value="Enviar datos">
 
 	</form>
+	
+	<script
+	src="https://code.jquery.com/jquery-3.4.1.js"
+	integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+	crossorigin="anonymous"></script>
+  
+	<script>
+  
+	  $(document).ready(function() {
+		$("#taskTable tr").click(function() {
+		  
+		  const task_id = $(this).find("#task_id").html();
+  
+		  if(!isNaN(task_id))
+			$("#id").val(parseInt(task_id))
+  
+	  });
+	});
+  
+	</script>
 
 {% endblock %}
