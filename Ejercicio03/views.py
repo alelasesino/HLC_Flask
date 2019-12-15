@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, abort
 from Ejercicio03 import app
 from Ejercicio03.forms import TaskForm, SelectTaskForm, TaskListForm
 from Ejercicio03.models import Task
+from Ejercicio03.utils import string_state
 
 import Ejercicio03.database as database
 
@@ -16,7 +17,7 @@ def add_task():
 
     form = TaskForm(False)
     form.estado.render_kw = {"disabled": True}
-    form.estado.data = 0
+    form.estado.data = 0 #ESTADO DE PENDIENTE
 
     if form.validate_on_submit():
         
@@ -26,7 +27,7 @@ def add_task():
         return render_template("inicio.html", message = "Tarea creada correctamente.")
 
     else:
-        return render_template("task_form.html", form = form, post_url = 'add_task', operation = "añadir")
+        return render_template("task_form.html", form = form, form_url = 'add_task', operation = "añadir")
 
 
 @app.route('/task/update', methods=['GET', 'POST'])
@@ -43,7 +44,8 @@ def select_update_task():
         return render_template("select_task.html", operation = "actualizar", 
                                                    task_list = task_list, 
                                                    form = form, 
-                                                   post_url = 'select_update_task')
+                                                   form_url = 'select_update_task',
+                                                   method = "POST")
 
 
 @app.route('/task/update/<int:task_id>', methods=['GET', 'POST'])
@@ -58,11 +60,10 @@ def update_task(task_id):
         task = Task(task_id, form.fecha.data, form.descripcion.data, form.prioridad.data, form.estado.data)
         database.update_task(task)
 
-        #return redirect(url_for('root'))
         return render_template("inicio.html", message = "Tarea modifica correctamente.")
 
     else:
-        return render_template("task_form.html", form = form, post_url = 'update_task', task_id = task_id, operation = "actualizar")
+        return render_template("task_form.html", form = form, form_url = 'update_task', task_id = task_id, operation = "actualizar")
 
 
 @app.route('/task/delete', methods=['GET', 'POST'])
@@ -70,27 +71,27 @@ def select_delete_task():
 
     task_list = database.get_all_task()
 
-    form = SelectTaskForm(task_list)
+    form = SelectTaskForm(task_list, request.args)
 
-    if form.validate_on_submit():
-        delete_task(form.id.data)
-        #return redirect(url_for('root'))
-        return render_template("inicio.html", message = "Tarea borrada correctamente.")
+    if len(request.args) > 0:
+        if form.validate():
+            database.delete_task(form.id.data)
+            return render_template("inicio.html", message = "Tarea borrada correctamente.")
 
-    else:
-        return render_template("select_task.html", operation = "borrar", 
-                                                   task_list = task_list, 
-                                                   form = form, 
-                                                   post_url = 'select_delete_task')
-
-
-#@app.route('/task/delete/<int:task_id>', methods=['POST'])
-def delete_task(task_id):
-    database.delete_task(task_id)
+    return render_template("select_task.html", operation = "borrar", 
+                                                task_list = task_list, 
+                                                form = form, 
+                                                form_url = 'select_delete_task',
+                                                method = "GET")
 
 
 def bind_data_task_form(form, task):
+    """Inyecta los datos de la tarea en los campos del formulario
     
+    Arguments:
+        form {TaskForm} -- Formulario para inyectar los datos
+        task {Task} -- Datos de la tarea
+    """
     if(task == None): abort(404)
 
     form.fecha.data = task.fecha
@@ -109,6 +110,11 @@ def task_list():
         'completed': lambda: database.get_state_task(2)
     }
 
+    state = {
+        'pending': 'pendientes',
+        'completed': 'completadas'
+    }
+
     if filter == None or filter == "form":
         task_list = database.get_all_task()
     else:
@@ -123,7 +129,14 @@ def task_list():
         task_list = database.get_priority_state_task(form.prioridad.data, form.estado.data)
         filter = "form"
 
-    return render_template("task_list.html", form = form, task_list = task_list, filter = filter, operation = "listar")
+    estado = ""
+    if filter in state:
+        estado = state[filter]
+    else:
+        if form.estado.data != None:
+            estado = string_state(form.estado.data, plural=True).lower()
+
+    return render_template("task_list.html", form = form, task_list = task_list, filter = filter, operation = "listar", estado = estado)
 
 
 @app.errorhandler(404)

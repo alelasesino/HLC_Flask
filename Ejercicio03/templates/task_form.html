@@ -6,7 +6,7 @@
 	
 	<h2>Detalles de la tarea</h2>
 
-	<form action="{{url_for(post_url, task_id = task_id)}}" method="POST" novalidate>
+	<form action="{{url_for(form_url, task_id = task_id)}}" method="POST" novalidate>
 
 		<dl>
 			{{ form.csrf_token }}

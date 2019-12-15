@@ -1,6 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% from "macros.html" import items_nav %}
 
+{% block head %}
+{{super()}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+{% endblock %}
+
 {% block styles %}
 {{ super() }}
 
